@@ -43,6 +43,27 @@ function addTodo() {
   // 4. Limpa o campo de input
   newTodoText.value = '';
 }
+
+function deleteTodo(id: number) {
+  todos.value = todos.value.filter(todo => todo.id !== id);
+}
+
+function toggleCompleted(id: number) {
+    // Mapeia o array e, quando encontra a tarefa com o ID correto, inverte o valor de 'isCompleted'.
+    todos.value = todos.value.map(todo => {
+        if (todo.id === id) {
+            return {
+                // Retorna a tarefa, mas com isCompleted invertido (true vira false e vice-versa)
+                ...todo,
+                isCompleted: !todo.isCompleted
+            };
+        }
+        return todo; // Retorna as outras tarefas inalteradas
+    });
+}
+
+
+
 </script>
 
 <template>
@@ -54,7 +75,27 @@ function addTodo() {
   
   <ul>
     <li v-for="todo in todos" :key="todo.id">
-      {{ todo.text }}
+        <input 
+            type="checkbox" 
+            :checked="todo.isCompleted" 
+            @change="toggleCompleted(todo.id)"
+        />
+        
+        <span :class="{ completed: todo.isCompleted }">
+            {{ todo.text }}
+        </span>
+        
+        <button @click="deleteTodo(todo.id)">
+            X
+        </button>
     </li>
-  </ul>
+</ul>
+
 </template>
+
+<style scoped>
+.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+</style>

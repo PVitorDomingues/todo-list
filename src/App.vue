@@ -8,6 +8,9 @@ interface Todo {
   isCompleted: boolean;
 }
 
+// Importa o componente filho
+import TodoItem from './components/TodoItem.vue'; // <-- NOVO: IMPORTAÇÃO
+
 // Importa o MÓDULO DE REATIVIDADE
 import { ref } from 'vue';
 
@@ -67,28 +70,18 @@ function toggleCompleted(id: number) {
 </script>
 
 <template>
-  <h1>Minha Lista de Tarefas</h1>
-  
-  <input v-model="newTodoText" placeholder="O que precisa ser feito hoje?" />
-  
-  <button @click="addTodo">Adicionar</button>
-  
-  <ul>
-    <li v-for="todo in todos" :key="todo.id">
-        <input 
-            type="checkbox" 
-            :checked="todo.isCompleted" 
-            @change="toggleCompleted(todo.id)"
-        />
-        
-        <span :class="{ completed: todo.isCompleted }">
-            {{ todo.text }}
-        </span>
-        
-        <button @click="deleteTodo(todo.id)">
-            X
-        </button>
-    </li>
+<h1>Minha Lista de Tarefas</h1>
+
+<input v-model="newTodoText" placeholder="O que precisa ser feito hoje?" />
+<button @click="addTodo">Adicionar</button>
+
+<ul>
+  <li v-for="todo in todos" :key="todo.id">
+    <TodoItem 
+      :todo="todo"                
+      @delete="deleteTodo"          
+      @toggle="toggleCompleted"     />
+  </li>
 </ul>
 
 </template>
